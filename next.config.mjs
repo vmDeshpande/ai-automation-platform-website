@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const repoName = "ai-automation-platform-website"; // 👈 CHANGE THIS
+const repoName = "ai-automation-platform-website";
 
 const nextConfig = {
   output: "export",
