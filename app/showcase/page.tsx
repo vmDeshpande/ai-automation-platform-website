@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Zap, Bot, Cpu, Check, X, ArrowRight, TrendingUp, BarChart3, Search, MessageSquare, Lock } from "lucide-react"
-import { withBasePath } from "@/lib/path";
+
 import Link from "next/link"
 
 export default function ShowcasePage() {
@@ -227,7 +227,7 @@ export default function ShowcasePage() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="h-14 px-10 text-lg rounded-full bg-transparent" asChild>
-                <Link href={withBasePath("/docs")}>View Documentation</Link>
+                <Link href="/docs">View Documentation</Link>
               </Button>
             </div>
           </div>

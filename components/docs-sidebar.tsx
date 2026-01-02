@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { withBasePath } from "@/lib/path";
 import {
   Workflow,
   Bot,
@@ -84,13 +83,12 @@ export function DocsSidebar() {
 
           <div className="grid gap-0.5 text-sm">
             {section.items.map((item, j) => {
-              const href = withBasePath(item.href);
-              const active = pathname === href || pathname === item.href;
+              const active = pathname === item.href;
 
               return (
                 <Link
                   key={j}
-                  href={href}
+                  href={item.href}
                   className={cn(
                     "group flex items-center rounded-md px-2 py-1.5 transition-colors",
                     active

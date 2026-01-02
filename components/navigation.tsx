@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
-import { withBasePath } from "@/lib/path";
+
 
 export function Navigation() {
   return (
@@ -65,7 +65,7 @@ export function Navigation() {
               GitHub
             </Link>
           </Button>
-          <Link href={withBasePath("/docs")}>
+          <Link href="/docs">
             <Button size="sm">Get started</Button>
           </Link>
         </div>

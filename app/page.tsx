@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { withBasePath } from "@/lib/path";
+
 import {
   Bot,
   Workflow,
@@ -63,7 +63,7 @@ export default function HomePage() {
               className="text-lg px-8 h-14 rounded-full"
               asChild
             >
-              <Link href={withBasePath("/docs")}>
+              <Link href="/docs">
                 Start Building
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Link>
@@ -330,7 +330,7 @@ export default function HomePage() {
                 className="h-14 px-8 text-lg rounded-full"
                 asChild
               >
-                <Link href={withBasePath("/docs")}>Read the Docs</Link>
+                <Link href="/docs">Read the Docs</Link>
               </Button>
               <Button
                 size="lg"
