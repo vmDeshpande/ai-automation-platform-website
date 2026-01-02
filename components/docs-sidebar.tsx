@@ -74,7 +74,7 @@ export function DocsSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="w-full space-y-8 pr-4">
+    <div className="space-y-8">
       {sidebarItems.map((section, i) => (
         <div key={i} className="space-y-3">
           <h4 className="px-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/60">
