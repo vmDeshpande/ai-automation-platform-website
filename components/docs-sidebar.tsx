@@ -70,7 +70,11 @@ const sidebarItems = [
   },
 ];
 
-export function DocsSidebar() {
+export function DocsSidebar({
+  onNavigate,
+}: {
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
 
   return (
@@ -89,6 +93,7 @@ export function DocsSidebar() {
                 <Link
                   key={j}
                   href={item.href}
+                  onClick={onNavigate}
                   className={cn(
                     "group flex items-center rounded-md px-2 py-1.5 transition-colors",
                     active
