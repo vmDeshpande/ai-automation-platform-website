@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { withBasePath } from "@/lib/path";
 import {
   Workflow,
   Bot,
@@ -33,19 +34,13 @@ const sidebarItems = [
       { title: "Configuration", href: "/docs/configuration", icon: Settings },
     ],
   },
-
   {
     title: "Why This Platform",
     items: [
       { title: "Overview", href: "/docs/why", icon: Shield },
-      {
-        title: "Comparison & Alternatives",
-        href: "/docs/why-compare",
-        icon: Layers,
-      },
+      { title: "Comparison & Alternatives", href: "/docs/why-compare", icon: Layers },
     ],
   },
-
   {
     title: "Core Concepts",
     items: [
@@ -55,7 +50,6 @@ const sidebarItems = [
       { title: "Step Runner", href: "/docs/runner", icon: Cpu },
     ],
   },
-
   {
     title: "Modules & Features",
     items: [
@@ -66,7 +60,6 @@ const sidebarItems = [
       { title: "Execution Logs", href: "/docs/logs", icon: History },
     ],
   },
-
   {
     title: "Reference & Ops",
     items: [
@@ -83,21 +76,24 @@ export function DocsSidebar() {
 
   return (
     <div className="w-full space-y-8 pr-4">
-      <div className="space-y-8">
-        {sidebarItems.map((section, i) => (
-          <div key={i} className="space-y-3">
-            <h4 className="px-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/60">
-              {section.title}
-            </h4>
+      {sidebarItems.map((section, i) => (
+        <div key={i} className="space-y-3">
+          <h4 className="px-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/60">
+            {section.title}
+          </h4>
 
-            <div className="grid gap-0.5 text-sm">
-              {section.items.map((item, j) => (
-                <a
+          <div className="grid gap-0.5 text-sm">
+            {section.items.map((item, j) => {
+              const href = withBasePath(item.href);
+              const active = pathname === href || pathname === item.href;
+
+              return (
+                <Link
                   key={j}
-                  href={item.href}
+                  href={href}
                   className={cn(
                     "group flex items-center rounded-md px-2 py-1.5 transition-colors",
-                    pathname === item.href
+                    active
                       ? "bg-accent text-primary font-semibold"
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   )}
@@ -105,18 +101,18 @@ export function DocsSidebar() {
                   <item.icon
                     className={cn(
                       "mr-2.5 h-4 w-4",
-                      pathname === item.href
+                      active
                         ? "text-primary"
                         : "text-muted-foreground/50 group-hover:text-foreground"
                     )}
                   />
                   {item.title}
-                </a>
-              ))}
-            </div>
+                </Link>
+              );
+            })}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }
