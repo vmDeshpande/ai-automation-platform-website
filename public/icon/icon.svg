@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#020617"/>
+
+  <!-- Flow lines -->
+  <path d="M20 32 H28" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M36 32 H44" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Side nodes -->
+  <circle cx="16" cy="32" r="4" fill="#38bdf8"/>
+  <circle cx="48" cy="32" r="4" fill="#38bdf8"/>
+
+  <!-- AI Core -->
+  <circle cx="32" cy="32" r="8" fill="#22d3ee"/>
+
+  <!-- Core details -->
+  <circle cx="32" cy="32" r="3" fill="#020617"/>
+</svg>
