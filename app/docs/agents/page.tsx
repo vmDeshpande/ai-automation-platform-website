@@ -6,6 +6,13 @@ export const metadata = {
   title: "AI Agents | AI Agent Automation Docs",
   description:
     "Learn how AI agents work in the automation platform including configuration, providers, models, and execution behavior.",
+    alternates: {
+    canonical: "/docs/agents/",
+  },
+
+  openGraph: {
+    url: "/docs/agents/",
+  },
 };
 
 export default function AgentsDocs() {

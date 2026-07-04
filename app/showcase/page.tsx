@@ -22,6 +22,13 @@ export const metadata = {
   title: "Workflow Showcase | AI Agent Automation",
   description:
     "Explore real examples of automation workflows built with AI Agent Automation including research agents, RAG pipelines, and automation tools.",
+  alternates: {
+    canonical: "/showcase/",
+  },
+
+  openGraph: {
+    url: "/showcase/",
+  },
 };
 
 export default function ShowcasePage() {

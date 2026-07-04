@@ -14,6 +14,13 @@ export const metadata = {
   title: "Execution Logs | AI Agent Automation Docs",
   description:
     "Inspect workflow execution logs, step results, and debugging information.",
+  alternates: {
+    canonical: "/docs/logs/",
+  },
+
+  openGraph: {
+    url: "/docs/logs/",
+  },
 };
 
 export default function ExecutionLogsPage() {

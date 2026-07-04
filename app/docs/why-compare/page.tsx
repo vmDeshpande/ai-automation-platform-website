@@ -6,6 +6,12 @@ export const metadata = {
   title: "AI Agent Automation vs Zapier vs n8n",
   description:
     "Compare AI Agent Automation with traditional automation tools like Zapier and n8n.",
+  alternates: {
+    canonical: "/docs/why-compare/",
+  },
+  openGraph: {
+    url: "/docs/why-compare/",
+  },
 };
 
 export default function WhyCompare() {

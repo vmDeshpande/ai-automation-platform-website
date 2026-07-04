@@ -14,6 +14,13 @@ export const metadata = {
   title: "Automation Tools | AI Agent Automation Docs",
   description:
     "Extend AI workflows with automation tools including HTTP requests, file operations, browser automation, and email integrations.",
+  alternates: {
+    canonical: "/docs/tools/",
+  },
+
+  openGraph: {
+    url: "/docs/tools/",
+  },
 };
 
 export default function ToolsDocs() {

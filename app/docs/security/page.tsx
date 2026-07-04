@@ -13,6 +13,12 @@ export const metadata = {
   title: "Security | AI Agent Automation Docs",
   description:
     "Security principles of AI Agent Automation including local-first architecture and infrastructure ownership.",
+  alternates: {
+    canonical: "/docs/security/",
+  },
+  openGraph: {
+    url: "/docs/security/",
+  },
 };
 
 export default function SecurityDocs() {

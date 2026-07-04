@@ -6,6 +6,12 @@ export const metadata = {
   title: "Quickstart Guide | AI Agent Automation Docs",
   description:
     "Get started quickly with AI Agent Automation by installing the platform and running your first AI workflow.",
+  alternates: {
+    canonical: "/docs/quickstart/",
+  },
+  openGraph: {
+    url: "/docs/quickstart/",
+  },
 };
 
 export default function QuickstartPage() {

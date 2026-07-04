@@ -6,6 +6,13 @@ export const metadata = {
   title: "Installation Guide | AI Agent Automation",
   description:
     "Install AI Agent Automation locally and run the workflow automation engine with agents, tools, and scheduling.",
+  alternates: {
+    canonical: "/docs/installation/",
+  },
+
+  openGraph: {
+    url: "/docs/installation/",
+  },
 };
 
 export default function InstallationDocs() {

@@ -6,6 +6,12 @@ export const metadata = {
   title: "API Reference | AI Agent Automation Docs",
   description:
     "Complete API reference for the AI Agent Automation backend and workflow engine.",
+  alternates: {
+    canonical: "/docs/api-reference/",
+  },
+  openGraph: {
+    url: "/docs/api-reference/",
+  },
 };
 
 export default function APIReferenceDocs() {

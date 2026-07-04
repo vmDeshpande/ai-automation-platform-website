@@ -16,6 +16,13 @@ export const metadata = {
   title: "System Architecture | AI Agent Automation",
   description:
     "Understand the architecture of AI Agent Automation including the workflow runner, executor, scheduler, and modular automation tools.",
+    alternates: {
+    canonical: "/architecture/",
+  },
+
+  openGraph: {
+    url: "/architecture/",
+  },
 };
 
 export default function ArchitecturePage() {

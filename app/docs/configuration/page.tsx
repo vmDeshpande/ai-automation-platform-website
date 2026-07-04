@@ -6,6 +6,12 @@ export const metadata = {
   title: "Configuration | AI Agent Automation Docs",
   description:
     "Configure AI providers, system settings, and environment variables for the AI Agent Automation platform.",
+  alternates: {
+    canonical: "/docs/configuration/",
+  },
+  openGraph: {
+    url: "/docs/configuration/",
+  },
 };
 
 export default function ConfigurationDocs() {

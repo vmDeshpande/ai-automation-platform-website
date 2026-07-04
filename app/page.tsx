@@ -34,6 +34,13 @@ export const metadata = {
     "Zapier alternative",
     "n8n alternative",
   ],
+  alternates: {
+    canonical: "/",
+  },
+
+  openGraph: {
+    url: "/",
+  },
 };
 
 export default function HomePage() {

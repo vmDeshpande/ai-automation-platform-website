@@ -6,6 +6,12 @@ export const metadata = {
   title: "Document RAG System | AI Agent Automation Docs",
   description:
     "Use retrieval-augmented generation to query documents using embeddings and AI models.",
+  alternates: {
+    canonical: "/docs/rag/",
+  },
+  openGraph: {
+    url: "/docs/rag/",
+  },
 };
 
 export default function RAGDocs() {

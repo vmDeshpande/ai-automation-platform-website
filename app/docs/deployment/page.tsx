@@ -13,6 +13,12 @@ export const metadata = {
   title: "Deployment Guide | AI Agent Automation",
   description:
     "Deploy AI Agent Automation in production environments with Docker, Node.js, and MongoDB.",
+  alternates: {
+    canonical: "/docs/deployment/",
+  },
+  openGraph: {
+    url: "/docs/deployment/",
+  },
 };
 
 export default function DeploymentDocs() {

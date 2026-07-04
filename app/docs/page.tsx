@@ -6,6 +6,13 @@ export const metadata = {
   title: "Documentation | AI Agent Automation",
   description:
     "Official documentation for AI Agent Automation including installation, workflows, agents, tools, and system architecture.",
+  alternates: {
+    canonical: "/docs/",
+  },
+
+  openGraph: {
+    url: "/docs/",
+  },
 };
 
 export default function DocsIntroduction() {

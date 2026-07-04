@@ -6,6 +6,12 @@ export const metadata = {
   title: "System Architecture | AI Agent Automation Docs",
   description:
     "Detailed architecture documentation of the AI Agent Automation engine.",
+  alternates: {
+    canonical: "/docs/architecture/",
+  },
+  openGraph: {
+    url: "/docs/architecture/",
+  },
 };
 
 export default function ArchitectureDocs() {

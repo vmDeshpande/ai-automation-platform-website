@@ -6,6 +6,13 @@ export const metadata = {
   title: "Local First Architecture | AI Agent Automation Docs",
   description:
     "Understand why AI Agent Automation is designed as a local-first AI automation platform.",
+  alternates: {
+    canonical: "/docs/local-first/",
+  },
+
+  openGraph: {
+    url: "/docs/local-first/",
+  },
 };
 
 export default function LocalFirstDocs() {

@@ -31,6 +31,13 @@ export const metadata = {
     "AI agents automation",
     "self hosted automation",
   ],
+  alternates: {
+    canonical: "/features/",
+  },
+
+  openGraph: {
+    url: "/features/",
+  },
 };
 
 export default function FeaturesPage() {

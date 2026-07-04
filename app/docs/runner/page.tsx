@@ -15,6 +15,13 @@ export const metadata = {
   title: "Workflow Runner | AI Agent Automation Docs",
   description:
     "Understand how the workflow runner executes automation pipelines step-by-step.",
+  alternates: {
+    canonical: "/docs/runner/",
+  },
+
+  openGraph: {
+    url: "/docs/runner/",
+  },
 };
 
 export default function StepRunnerPage() {

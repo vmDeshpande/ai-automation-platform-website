@@ -16,6 +16,13 @@ export const metadata = {
   title: "Workflow Execution Model | AI Agent Automation",
   description:
     "Learn how workflows execute deterministically in AI Agent Automation including task runners, step execution, and runtime context.",
+  alternates: {
+    canonical: "/execution-model/",
+  },
+
+  openGraph: {
+    url: "/execution-model/",
+  },
 };
 
 export default function ExecutionModelPage() {

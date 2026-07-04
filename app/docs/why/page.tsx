@@ -6,6 +6,13 @@ export const metadata = {
   title: "Why AI Agent Automation | Platform Philosophy",
   description:
     "Learn the philosophy behind building deterministic AI automation systems.",
+  alternates: {
+    canonical: "/docs/why/",
+  },
+
+  openGraph: {
+    url: "/docs/why/",
+  },
 };
 
 export default function WhyPlatform() {

@@ -6,6 +6,13 @@ export const metadata = {
   title: "Agent Memory System | AI Agent Automation Docs",
   description:
     "Learn how semantic memory allows AI agents to store and retrieve knowledge using embeddings and similarity search.",
+  alternates: {
+    canonical: "/docs/memory/",
+  },
+
+  openGraph: {
+    url: "/docs/memory/",
+  },
 };
 
 export default function MemoryDocs() {

@@ -19,6 +19,13 @@ export const metadata = {
   title: "Community | AI Agent Automation",
   description:
     "Join the community building AI Agent Automation. Contribute on GitHub, participate in discussions, and collaborate on open-source AI workflows.",
+  alternates: {
+    canonical: "/community/",
+  },
+
+  openGraph: {
+    url: "/community/",
+  },
 };
 
 export default function CommunityPage() {

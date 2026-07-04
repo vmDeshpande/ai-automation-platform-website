@@ -6,6 +6,12 @@ export const metadata = {
   title: "Workflow Engine | AI Agent Automation Docs",
   description:
     "Understand how AI Agent Automation workflows orchestrate LLM reasoning, tools, and automation pipelines.",
+  alternates: {
+    canonical: "/docs/workflows/",
+  },
+  openGraph: {
+    url: "/docs/workflows/",
+  },
 };
 
 export default function WorkflowsDocs() {

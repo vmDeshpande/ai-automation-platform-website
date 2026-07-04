@@ -6,6 +6,12 @@ export const metadata = {
   title: "Scheduler | AI Agent Automation Docs",
   description:
     "Schedule AI workflows with cron jobs and recurring automation tasks.",
+  alternates: {
+    canonical: "/docs/scheduler/",
+  },
+  openGraph: {
+    url: "/docs/scheduler/",
+  },
 };
 
 export default function SchedulerDocs() {
