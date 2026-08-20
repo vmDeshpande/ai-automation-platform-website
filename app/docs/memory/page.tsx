@@ -9,7 +9,6 @@ export const metadata = {
   alternates: {
     canonical: "/docs/memory/",
   },
-
   openGraph: {
     url: "/docs/memory/",
   },
@@ -31,7 +30,7 @@ export default function MemoryDocs() {
         <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
           A vendor-agnostic, embedding-powered semantic memory system that
           enables agents to persist knowledge, recall context intelligently, and
-          maintain continuity across workflow executions.
+          maintain continuity across workflow executions and team sessions.
         </p>
       </div>
 
@@ -148,19 +147,74 @@ export default function MemoryDocs() {
       </div>
 
       {/* PROVIDER AGNOSTIC */}
-      <Card className="p-6 border-secondary/20 bg-secondary/5">
-        <div className="flex items-center gap-3 mb-3">
-          <Shield className="h-5 w-5 text-secondary" />
-          <h3 className="font-bold text-lg">Vendor-Agnostic by Design</h3>
-        </div>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          The memory system does not depend on any external vector database.
-          Embeddings are generated via configured providers and stored locally
-          in MongoDB. If an LLM provider does not support embeddings (e.g.,
-          Groq), the system automatically falls back to a local embedding
-          provider such as Ollama.
+      <div className="space-y-6">
+        <h2 className="text-3xl font-bold">Provider Agnostic</h2>
+        <p className="text-muted-foreground leading-relaxed">
+          The embedding layer is decoupled from the LLM provider. You can use
+          OpenAI embeddings with Groq LLMs, or Ollama embeddings with Gemini
+          LLMs. The system routes embeddings independently based on environment
+          configuration.
         </p>
-      </Card>
+      </div>
+
+      {/* MEMORY API */}
+      <div className="space-y-6">
+        <h2 className="text-3xl font-bold">Memory API</h2>
+        <div className="grid gap-4">
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-primary/20 text-primary border-none font-mono">
+                GET
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/memory
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              List memories for the authenticated user, optionally filtered by agent.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-primary/20 text-primary border-none font-mono">
+                GET
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/memory/agents
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              List all agents that have stored memory entries.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-destructive/20 text-destructive border-none font-mono">
+                DELETE
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/memory/:id
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Delete a specific memory entry.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-destructive/20 text-destructive border-none font-mono">
+                DELETE
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/memory/agent/:agentId
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Clear all memory entries for a specific agent.
+            </p>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

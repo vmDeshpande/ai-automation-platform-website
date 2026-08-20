@@ -40,27 +40,30 @@ export default function ArchitectureDocs() {
             {
               title: "API Layer",
               icon: Globe,
-              desc: "Express server handling REST requests, authentication, and workflow registration.",
-              items: ["Route Handlers", "Input Validation", "Auth Middleware"],
+              desc: "Express server handling REST requests, authentication, validation, and workflow registration.",
+              items: ["Route Handlers", "Input Validation", "Auth Middleware", "Rate Limiting", "Helmet Headers"],
             },
             {
               title: "Orchestration Layer",
               icon: Cpu,
-              desc: "The Step Runner manages the workflow lifecycle, state transitions, and variable passing.",
+              desc: "The Step Runner manages the workflow lifecycle, state transitions, variable passing, and retries.",
               items: [
                 "Step Runner",
                 "Variable Interpolation",
                 "Error Policy Engine",
+                "Distributed Locks",
+                "Trace IDs",
               ],
             },
             {
               title: "Persistence Layer",
               icon: Database,
-              desc: "MongoDB stores workflow definitions, execution logs, and agent memory.",
+              desc: "MongoDB stores workflow definitions, execution logs, agent memory, and telemetry.",
               items: [
                 "Mongoose Models",
                 "Vector Search (RAG)",
                 "Execution History",
+                "Replica Set",
               ],
             },
           ].map((layer, i) => (
@@ -98,123 +101,99 @@ export default function ArchitectureDocs() {
             <div className="space-y-6">
               <p className="text-muted-foreground leading-relaxed">
                 The platform follows a unidirectional data flow for executions.
-                Triggers are captured by the API or Scheduler, which then hands
-                off the execution to the Runner. The Runner interacts with
-                various Executors (LLM, Tools) while updating the state in
-                MongoDB.
               </p>
-              <div className="space-y-4">
-                {[
-                  {
-                    title: "Stateless API",
-                    desc: "The frontend is a pure dashboard interacting with the API server.",
-                  },
-                  {
-                    title: "Isolated Workers",
-                    desc: "Step execution can be distributed across multiple worker processes.",
-                  },
-                  {
-                    title: "Event Driven",
-                    desc: "Logs and status updates are persisted as events occur.",
-                  },
-                ].map((point, i) => (
-                  <div key={i} className="flex gap-3 items-start">
-                    <div className="mt-1 h-2 w-2 rounded-full bg-primary shrink-0" />
-                    <div>
-                      <h4 className="font-bold text-sm">{point.title}</h4>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        {point.desc}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ol className="list-decimal pl-6 text-muted-foreground space-y-2">
+                <li>
+                  <strong>Frontend</strong> sends workflow definitions and
+                  execution requests to the Express API.
+                </li>
+                <li>
+                  <strong>Express API</strong> validates input, persists
+                  workflows/tasks, and enqueues tasks.
+                </li>
+                <li>
+                  <strong>Worker</strong> polls for pending tasks and passes
+                  them to the Step Runner.
+                </li>
+                <li>
+                  <strong>Runner</strong> claims tasks atomically, initializes
+                  context, and executes steps sequentially or in parallel.
+                </li>
+                <li>
+                  <strong>Executor</strong> dispatches each step to the correct
+                  handler (LLM, HTTP, tool, MCP, etc.).
+                </li>
+                <li>
+                  <strong>Results</strong> are persisted to MongoDB and
+                  broadcast via Socket.IO.
+                </li>
+              </ol>
             </div>
-            <div className="relative aspect-square md:aspect-video lg:aspect-square flex items-center justify-center">
-              {/* Abstract Architecture Diagram */}
-              <div className="absolute inset-0 border-2 border-dashed border-primary/10 rounded-3xl" />
-              <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
-                <div className="col-span-2 p-4 rounded-xl border border-primary/30 bg-primary/5 text-center">
-                  <span className="text-xs font-mono font-bold text-primary">
-                    API SERVER (REST)
-                  </span>
-                </div>
-                <div className="p-4 rounded-xl border border-border bg-card/50 text-center">
-                  <span className="text-[10px] font-mono text-muted-foreground">
-                    SCHEDULER
-                  </span>
-                </div>
-                <div className="p-4 rounded-xl border border-border bg-card/50 text-center">
-                  <span className="text-[10px] font-mono text-muted-foreground">
-                    WORKER POOL
-                  </span>
-                </div>
-                <div className="col-span-2 p-6 rounded-2xl border-2 border-secondary/50 bg-secondary/5 text-center shadow-xl shadow-secondary/10">
-                  <span className="text-sm font-mono font-bold text-secondary">
-                    AGENT RUNNER
-                  </span>
-                </div>
-                <div className="col-span-2 flex justify-center gap-4">
-                  <div className="px-4 py-2 rounded-lg border border-border bg-muted/30">
-                    <Database className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <div className="px-4 py-2 rounded-lg border border-border bg-muted/30">
-                    <Shield className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                </div>
-              </div>
+            <div className="space-y-4">
+              <Card className="p-4 border-border/50 bg-card/30">
+                <h4 className="font-bold mb-2">Event Broker</h4>
+                <p className="text-xs text-muted-foreground">
+                  Socket.IO streams workflow progress and task updates to the
+                  frontend in real time.
+                </p>
+              </Card>
+              <Card className="p-4 border-border/50 bg-card/30">
+                <h4 className="font-bold mb-2">Distributed Locks</h4>
+                <p className="text-xs text-muted-foreground">
+                  MongoDB-backed locks ensure safe parallel and join-node
+                  execution across multiple workers.
+                </p>
+              </Card>
+              <Card className="p-4 border-border/50 bg-card/30">
+                <h4 className="font-bold mb-2">Scheduler</h4>
+                <p className="text-xs text-muted-foreground">
+                  Cron-based task creation runs within the backend process,
+                  creating tasks that the worker picks up automatically.
+                </p>
+              </Card>
             </div>
           </div>
         </Card>
       </div>
 
-      <section className="space-y-6">
-        <h2 className="text-3xl font-bold">Execution Engine Flow</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="space-y-8">
+        <h2 className="text-3xl font-bold">Key Subsystems</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {[
             {
-              title: "Initialization",
-              desc: "Load workflow definition and initialize context.",
+              title: "Agent Teams & A2A",
+              desc: "Multi-agent coordination with visual team builder, war room chat, session logs, capability discovery, and external agent webhooks.",
             },
             {
-              title: "Pre-execution",
-              desc: "Validate inputs and resolve variable templates.",
+              title: "Workflow APIs",
+              desc: "Public endpoints with custom slugs, optional bearer auth, and sync/async invocation modes.",
             },
             {
-              title: "Processing",
-              desc: "Dispatch steps to specialized executors (LLM, HTTP, etc.).",
+              title: "MCP Integration",
+              desc: "Model Context Protocol client manager with stdio and streamable-http transports, tool discovery, and execution adapter.",
             },
             {
-              title: "Post-execution",
-              desc: "Normalize outputs and persist execution logs.",
+              title: "Hybrid RAG",
+              desc: "Pluggable document retrieval strategies combining keyword and semantic search with document analysis metadata.",
             },
-          ].map((step, i) => (
-            <Card key={i} className="p-6 border-border/30 bg-card/20 relative">
-              <div className="absolute -top-3 -left-3 h-8 w-8 rounded-full bg-background border border-border flex items-center justify-center text-xs font-bold text-primary">
-                {i + 1}
-              </div>
-              <h4 className="font-bold mb-2">{step.title}</h4>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {step.desc}
+            {
+              title: "Telemetry",
+              desc: "Optional anonymous heartbeat collection with local metrics for workflow executions, step counts, and version tracking.",
+            },
+            {
+              title: "Template System",
+              desc: "JSON workflow templates with validation, import, export, and starter templates for common automations.",
+            },
+          ].map((item, i) => (
+            <Card key={i} className="p-6 border-border/50 bg-card/30">
+              <h4 className="font-bold text-lg mb-2">{item.title}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {item.desc}
               </p>
             </Card>
           ))}
         </div>
-      </section>
-
-      <Card className="p-6 border-secondary/20 bg-secondary/5">
-        <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
-          <Server className="h-5 w-5 text-secondary" />
-          Modular Extensibility
-        </h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          The architecture is designed to be plug-and-play. You can easily add
-          new executors by implementing a standard interface in the{" "}
-          <code>backend/src/runner/executors</code> directory. This allows the
-          platform to support any third-party service or custom internal logic
-          with minimal effort.
-        </p>
-      </Card>
+      </div>
     </div>
   );
 }

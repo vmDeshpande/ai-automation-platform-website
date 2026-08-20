@@ -50,6 +50,10 @@ export default function WhyCompare() {
               ["Full Execution Logs", true, true],
               ["UI + Code Hybrid", true, false],
               ["Black-Box AI Steps", false, true],
+              ["Agent Teams & A2A", true, false],
+              ["Public Workflow APIs", true, false],
+              ["MCP Integration", true, false],
+              ["Hybrid Document RAG", true, false],
             ].map(([label, ours, others], i) => (
               <tr key={i} className="border-t border-border/50">
                 <td className="p-4 font-medium">{label}</td>
@@ -78,8 +82,8 @@ export default function WhyCompare() {
           Not a Replacement — a Different Philosophy
         </h2>
         <p className="text-muted-foreground leading-relaxed">
-          This platform isn’t trying to replace cloud-first tools. It exists for
-          developers who want local execution, predictable behavior, and deep
+          This platform isn&apos;t trying to replace cloud-first tools. It exists
+          for developers who want local execution, predictable behavior, and deep
           introspection into how their automation works.
         </p>
       </Card>

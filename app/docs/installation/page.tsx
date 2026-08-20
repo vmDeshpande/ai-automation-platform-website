@@ -9,7 +9,6 @@ export const metadata = {
   alternates: {
     canonical: "/docs/installation/",
   },
-
   openGraph: {
     url: "/docs/installation/",
   },
@@ -30,8 +29,8 @@ export default function InstallationDocs() {
           Installation
         </h1>
         <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-          Set up the AI Agent Automation Platform locally. No cloud required.
-          Everything runs on your machine.
+          Set up the AI Agent Automation Platform locally or with Docker. No
+          cloud required. Everything runs on your machine.
         </p>
       </div>
 
@@ -41,9 +40,9 @@ export default function InstallationDocs() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             "Node.js 18.x or higher",
-            "MongoDB (local or Atlas)",
+            "MongoDB 7.x (local or Atlas, must be a replica set)",
             "npm or yarn",
-            "LLM API Key (OpenAI, Gemini, Groq, etc.)",
+            "LLM API Key (OpenAI, Gemini, Groq, Ollama, or Hugging Face)",
           ].map((item, i) => (
             <div
               key={i}
@@ -99,6 +98,11 @@ export default function InstallationDocs() {
               </code>
             </pre>
           </Card>
+          <p className="text-sm text-muted-foreground">
+            Edit <code>backend/.env</code> and fill in the required values:
+            <code>MONGO_URI</code>, <code>JWT_SECRET</code>, and at least one
+            LLM provider key.
+          </p>
         </div>
 
         {/* Step 3 */}
@@ -107,23 +111,16 @@ export default function InstallationDocs() {
             <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
               3
             </div>
-            Run Backend & Worker
+            Frontend Configuration
           </h3>
           <p className="text-muted-foreground leading-relaxed">
-            The backend handles APIs and state. The worker executes workflows.
-            Run them in <strong>separate terminals</strong>.
+            Install frontend dependencies.
           </p>
-          <Card className="p-4 bg-muted/30 border-border/50 space-y-3">
+          <Card className="p-4 bg-muted/30 border-border/50">
             <pre className="text-sm font-mono text-muted-foreground">
               <code>
-                # Terminal 1 (API server){"\n"}
-                npm run dev
-              </code>
-            </pre>
-            <pre className="text-sm font-mono text-muted-foreground">
-              <code>
-                # Terminal 2 (Worker / Step Runner){"\n"}
-                npm run worker
+                cd ../frontend{"\n"}
+                npm install
               </code>
             </pre>
           </Card>
@@ -135,38 +132,106 @@ export default function InstallationDocs() {
             <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
               4
             </div>
-            Start the Frontend
+            Start MongoDB
           </h3>
           <p className="text-muted-foreground leading-relaxed">
-            The frontend provides the dashboard and workflow UI.
+            MongoDB must run with a replica set enabled. For local development,
+            start mongod with the <code>--replSet</code> flag, or use Docker:
           </p>
           <Card className="p-4 bg-muted/30 border-border/50">
             <pre className="text-sm font-mono text-muted-foreground">
               <code>
-                cd frontend{"\n"}
-                npm install{"\n"}
-                npm run dev
+                docker run -d -p 27017:27017 --name mongo mongo:7 --replSet rs0
+                --bind_ip_all
               </code>
             </pre>
           </Card>
         </div>
+
+        {/* Step 5 */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold flex items-center gap-2">
+            <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
+              5
+            </div>
+            Start the Backend
+          </h3>
+          <Card className="p-4 bg-muted/30 border-border/50">
+            <pre className="text-sm font-mono text-muted-foreground">
+              <code>
+                cd backend{"\n"}
+                npm run dev
+              </code>
+            </pre>
+          </Card>
+          <p className="text-sm text-muted-foreground">
+            The API server starts on <code>http://localhost:5000</code>.
+          </p>
+        </div>
+
+        {/* Step 6 */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold flex items-center gap-2">
+            <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
+              6
+            </div>
+            Start the Worker
+          </h3>
+          <p className="text-muted-foreground leading-relaxed">
+            Open a new terminal and start the worker process. The worker polls
+            for pending tasks and executes workflow steps.
+          </p>
+          <Card className="p-4 bg-muted/30 border-border/50">
+            <pre className="text-sm font-mono text-muted-foreground">
+              <code>
+                cd backend{"\n"}
+                npm run worker
+              </code>
+            </pre>
+          </Card>
+        </div>
+
+        {/* Step 7 */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold flex items-center gap-2">
+            <div className="h-6 w-6 rounded bg-primary/10 flex items-center justify-center text-primary text-xs font-bold">
+              7
+            </div>
+            Start the Frontend
+          </h3>
+          <Card className="p-4 bg-muted/30 border-border/50">
+            <pre className="text-sm font-mono text-muted-foreground">
+              <code>
+                cd frontend{"\n"}
+                npm run dev
+              </code>
+            </pre>
+          </Card>
+          <p className="text-sm text-muted-foreground">
+            Open <code>http://localhost:3000</code> in your browser.
+          </p>
+        </div>
       </div>
 
-      {/* Success */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Verify Installation</h2>
-        <p className="text-muted-foreground leading-relaxed max-w-3xl">
-          If everything is running correctly:
+      <div className="space-y-8">
+        <h2 className="text-3xl font-bold">Docker Quick Start</h2>
+        <p className="text-muted-foreground leading-relaxed">
+          The fastest way to run the complete platform is with Docker Compose.
+          It provisions MongoDB with a replica set, the backend API, the worker,
+          the frontend, and an optional nginx proxy.
         </p>
-        <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-          <li>
-            Frontend is available at <strong>http://localhost:3000</strong>
-          </li>
-          <li>
-            Backend API runs on <strong>http://localhost:5000</strong>
-          </li>
-          <li>Worker logs show step execution activity</li>
-        </ul>
+        <Card className="p-4 bg-muted/30 border-border/50">
+          <pre className="text-sm font-mono text-muted-foreground">
+            <code>
+              cp infra/.env.example infra/.env{"\n"}
+              docker compose up --build
+            </code>
+          </pre>
+        </Card>
+        <p className="text-sm text-muted-foreground">
+          Access the frontend at <code>http://localhost:3000</code> and the API
+          at <code>http://localhost:5000</code>.
+        </p>
       </div>
     </div>
   );

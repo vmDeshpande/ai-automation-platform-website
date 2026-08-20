@@ -21,6 +21,19 @@ import {
   Server,
   Rocket,
   History,
+  Users,
+  Webhook,
+  Plug,
+  BarChart3,
+  GitBranch,
+  CheckSquare,
+  RefreshCw,
+  Wand2,
+  FileJson,
+  BotIcon as AgentTeam,
+  MessageSquare,
+  Play,
+  BookOpen,
 } from "lucide-react";
 
 const sidebarItems = [
@@ -44,19 +57,56 @@ const sidebarItems = [
     title: "Core Concepts",
     items: [
       { title: "Architecture", href: "/docs/architecture/", icon: Layers },
+      { title: "Execution Model", href: "/docs/execution-model/", icon: Play },
       { title: "Workflows", href: "/docs/workflows/", icon: Workflow },
       { title: "AI Agents", href: "/docs/agents/", icon: Bot },
       { title: "Step Runner", href: "/docs/runner/", icon: Cpu },
     ],
   },
   {
-    title: "Modules & Features",
+    title: "Workflow Nodes",
     items: [
-      { title: "Agent Tools", href: "/docs/tools/", icon: Tool },
-      { title: "Scheduler", href: "/docs/scheduler/", icon: Calendar },
-      { title: "Document Chat (RAG)", href: "/docs/rag/", icon: Search },
+      { title: "All Step Types", href: "/docs/tools/", icon: Tool },
+      { title: "Parallel & Join", href: "/docs/parallel-join/", icon: GitBranch },
+      { title: "Conditions & Switch", href: "/docs/conditions-switch/", icon: GitBranch },
+      { title: "Approval Workflows", href: "/docs/approval/", icon: CheckSquare },
+      { title: "Agent Call", href: "/docs/agent-call/", icon: Bot },
+      { title: "Replay & Resume", href: "/docs/replay/", icon: RefreshCw },
+    ],
+  },
+  {
+    title: "Agents & Teams",
+    items: [
+      { title: "Agent Configuration", href: "/docs/agents/", icon: Bot },
+      { title: "Agent Teams & A2A", href: "/docs/agent-teams/", icon: Users },
+      { title: "Agent Playground", href: "/docs/playground/", icon: Play },
+    ],
+  },
+  {
+    title: "Intelligence & Data",
+    items: [
       { title: "Agent Memory", href: "/docs/memory/", icon: Database },
+      { title: "Documents & RAG", href: "/docs/rag/", icon: Search },
+      { title: "Document Chat", href: "/docs/document-chat/", icon: MessageSquare },
+      { title: "MCP Integration", href: "/docs/mcp/", icon: Plug },
+    ],
+  },
+  {
+    title: "Automation & APIs",
+    items: [
+      { title: "Scheduler", href: "/docs/scheduler/", icon: Calendar },
+      { title: "Webhooks", href: "/docs/webhooks/", icon: Webhook },
+      { title: "Workflow APIs", href: "/docs/workflow-apis/", icon: Code },
+      { title: "Templates", href: "/docs/templates/", icon: FileJson },
+      { title: "AI Workflow Generation", href: "/docs/ai-generation/", icon: Wand2 },
+    ],
+  },
+  {
+    title: "Observability",
+    items: [
       { title: "Execution Logs", href: "/docs/logs/", icon: History },
+      { title: "Insights & Analytics", href: "/docs/insights/", icon: BarChart3 },
+      { title: "Task Executions", href: "/docs/tasks/", icon: CheckSquare },
     ],
   },
   {

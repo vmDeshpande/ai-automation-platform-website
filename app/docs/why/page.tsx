@@ -9,7 +9,6 @@ export const metadata = {
   alternates: {
     canonical: "/docs/why/",
   },
-
   openGraph: {
     url: "/docs/why/",
   },
@@ -59,7 +58,7 @@ export default function WhyPlatform() {
         ].map((item, i) => (
           <Card key={i} className="p-6 bg-card/30 border-border/50 space-y-3">
             <item.icon className="h-6 w-6 text-primary" />
-            <h3 className="font-bold text-lg">{item.title}</h3>
+            <h3 className="text-lg font-bold">{item.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {item.desc}
             </p>

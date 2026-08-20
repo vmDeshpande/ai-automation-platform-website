@@ -8,16 +8,20 @@ import {
   Terminal,
   Clock,
   Code,
+  Plug,
+  GitBranch,
+  CheckSquare,
+  Bot,
+  Search,
 } from "lucide-react";
 
 export const metadata = {
   title: "Automation Tools | AI Agent Automation Docs",
   description:
-    "Extend AI workflows with automation tools including HTTP requests, file operations, browser automation, and email integrations.",
+    "Extend AI workflows with automation tools and step types including HTTP, email, file, browser, MCP, conditions, approvals, and agent calls.",
   alternates: {
     canonical: "/docs/tools/",
   },
-
   openGraph: {
     url: "/docs/tools/",
   },
@@ -38,7 +42,8 @@ export default function ToolsDocs() {
         </h1>
         <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
           Pluggable modules that extend agent capabilities with actions like
-          HTTP requests, email, file operations, and more.
+          HTTP requests, email, file operations, browser automation, MCP calls,
+          branching, and agent delegation.
         </p>
       </div>
 
@@ -56,7 +61,7 @@ export default function ToolsDocs() {
               type: "LLM",
               title: "LLM / Agent Step",
               desc: "Invoke an AI agent with a prompt, tools, and context. Returns structured reasoning and output.",
-              example: '{ "type": "agent", "prompt": "Analyze this data..." }',
+              example: '{ "type": "llm", "prompt": "Analyze this data..." }',
             },
             {
               icon: Globe,
@@ -97,6 +102,54 @@ export default function ToolsDocs() {
               desc: "Pause workflow execution for a specified duration or until a condition is met.",
               example: '{ "type": "delay", "duration": 5000 }',
             },
+            {
+              icon: Search,
+              type: "DOCUMENT_QUERY",
+              title: "Document Query",
+              desc: "Query a document in the knowledge base using RAG retrieval.",
+              example:
+                '{ "type": "document_query", "documentId": "doc_123", "query": "..." }',
+            },
+            {
+              icon: Plug,
+              type: "MCP",
+              title: "MCP Tool Call",
+              desc: "Call a tool exposed by an MCP server.",
+              example:
+                '{ "type": "mcp", "serverId": "my-server", "toolName": "search" }',
+            },
+            {
+              icon: GitBranch,
+              type: "CONDITION",
+              title: "Condition",
+              desc: "Branch execution based on a boolean expression with if_true and if_false paths.",
+              example:
+                '{ "type": "condition", "operator": "==", "value": "200", "if_true": [...], "if_false": [...] }',
+            },
+            {
+              icon: GitBranch,
+              type: "SWITCH",
+              title: "Switch",
+              desc: "Route execution to one of multiple cases based on a value.",
+              example:
+                '{ "type": "switch", "cases": { "success": [...], "error": [...] } }',
+            },
+            {
+              icon: CheckSquare,
+              type: "APPROVAL",
+              title: "Human Approval",
+              desc: "Pause the workflow and wait for human approval before proceeding.",
+              example:
+                '{ "type": "approval", "approvalMessage": "Approve this action?" }',
+            },
+            {
+              icon: Bot,
+              type: "AGENT_CALL",
+              title: "Agent Call",
+              desc: "Delegate execution to a specialized AI agent.",
+              example:
+                '{ "type": "agent_call", "agentId": "agent_001", "input": "..." }',
+            },
           ].map((item, i) => (
             <Card
               key={i}
@@ -127,47 +180,69 @@ export default function ToolsDocs() {
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-3xl font-bold flex items-center gap-3">
-          Conditional Logic & Branching
-          <Badge variant="outline" className="text-primary border-primary/40">
-            Under Development
-          </Badge>
-        </h2>
+        <h2 className="text-3xl font-bold">Built-in Tool Integrations</h2>
         <p className="text-muted-foreground">
-          Use conditional steps to create dynamic workflows that adapt based on
-          previous step outputs or external data.
+          In addition to step types, the platform registers 8 built-in tools
+          through the dynamic tool registry. These tools run in a sandboxed
+          child process with configurable timeouts and environment restrictions.
         </p>
-        <Card className="overflow-hidden border-border/50 bg-card/50">
-          <div className="flex items-center gap-2 px-4 py-2 border-b border-border/50 bg-muted/30">
-            <Code className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs font-mono text-muted-foreground">
-              conditional-example.json
-            </span>
-          </div>
-          <pre className="p-6 text-sm font-mono overflow-x-auto text-muted-foreground">
-            <code>{`{
-  "type": "condition",
-  "condition": "{{steps.api_call.output.status}} === 200",
-  "if_true": [
-    { "type": "email", "to": "success@example.com", "subject": "Success!" }
-  ],
-  "if_false": [
-    { "type": "email", "to": "error@example.com", "subject": "Failed" }
-  ]
-}`}</code>
-          </pre>
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[
+            {
+              name: "email",
+              desc: "Send emails via SMTP using configured MAIL_HOST, MAIL_PORT, MAIL_USER, MAIL_PASS.",
+            },
+            {
+              name: "file",
+              desc: "Read, write, append, and list files. Configurable FILE_BASE_DIR for sandboxing.",
+            },
+            {
+              name: "browser",
+              desc: "Navigate pages, evaluate scripts, take screenshots using Puppeteer/Playwright.",
+            },
+            {
+              name: "github",
+              desc: "Interact with GitHub APIs using GITHUB_TOKEN.",
+            },
+            {
+              name: "slack",
+              desc: "Send messages to Slack using SLACK_WEBHOOK_URL.",
+            },
+            {
+              name: "discord",
+              desc: "Send messages to Discord using DISCORD_WEBHOOK_URL.",
+            },
+            {
+              name: "hackerNews",
+              desc: "Fetch top stories and comments from Hacker News.",
+            },
+            {
+              name: "sandbox",
+              desc: "Execute arbitrary code in an isolated child process with UID/GID restrictions.",
+            },
+          ].map((tool) => (
+            <Card
+              key={tool.name}
+              className="p-4 border-border/50 bg-card/30 flex flex-col gap-2"
+            >
+              <h4 className="font-bold font-mono text-sm">{tool.name}</h4>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {tool.desc}
+              </p>
+            </Card>
+          ))}
+        </div>
       </div>
 
-      <Card className="p-6 border-secondary/20 bg-secondary/5">
-        <h3 className="font-bold text-lg mb-3">Building Custom Tools</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">
+      <div className="space-y-6">
+        <h2 className="text-3xl font-bold">Building Custom Tools</h2>
+        <p className="text-muted-foreground leading-relaxed">
           You can extend the platform by writing custom tool executors in
-          Node.js. Each tool receives structured input, executes its logic, and
-          returns validated output. See the /src/runner/executors directory in
-          the repository for examples.
+          Node.js. Each tool must export a <code>meta</code> object and a{" "}
+          <code>run(step, context)</code> function. The tool is registered
+          automatically when placed in <code>backend/src/tools/</code>.
         </p>
-      </Card>
+      </div>
     </div>
   );
 }

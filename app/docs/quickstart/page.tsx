@@ -64,7 +64,9 @@ export default function QuickstartPage() {
             {`{
   "name": "Research Agent",
   "description": "Summarizes and analyzes information",
-  "tools": ["llm", "email", "file", "browser"]
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "capabilities": ["llm", "web_search"]
 }`}
           </pre>
         </div>
@@ -85,11 +87,19 @@ export default function QuickstartPage() {
           <pre className="text-green-400">
             {`{
   "name": "Daily Report Workflow",
-  "steps": [
-    { "type": "llm", "prompt": "Summarize today's updates" },
-    { "type": "file", "action": "write", "path": "./runtime/report.txt" },
-    { "type": "email", "to": "me@example.com" }
-  ]
+  "metadata": {
+    "steps": [
+      { "stepId": "fetch", "type": "http", "method": "GET", "url": "https://api.example.com/data" },
+      { "stepId": "summarize", "type": "llm", "prompt": "Summarize: {{steps.fetch.output}}" },
+      { "stepId": "save", "type": "file", "action": "write", "path": "./report.txt", "content": "{{steps.summarize.output}}" },
+      { "stepId": "notify", "type": "email", "to": "me@example.com", "subject": "Daily Report", "body": "{{steps.summarize.output}}" }
+    ],
+    "edges": [
+      { "id": "e1", "source": "fetch", "target": "summarize" },
+      { "id": "e2", "source": "summarize", "target": "save" },
+      { "id": "e3", "source": "save", "target": "notify" }
+    ]
+  }
 }`}
           </pre>
         </div>
@@ -98,103 +108,75 @@ export default function QuickstartPage() {
       {/* Step 3 */}
       <section className="space-y-4">
         <div className="flex items-center gap-3">
-          <Rocket className="h-6 w-6 text-primary" />
-          <h2 className="text-2xl font-bold">3. Execute with the Runner</h2>
+          <Terminal className="h-6 w-6 text-primary" />
+          <h2 className="text-2xl font-bold">3. Run the Workflow</h2>
         </div>
         <p className="text-muted-foreground max-w-3xl">
-          The runner picks up tasks, executes each step, logs output, and
-          updates execution state in real time.
+          Save the workflow in the UI or via the API, then trigger a manual
+          execution. The worker picks up the task and executes each step in
+          order.
         </p>
 
-        <Card className="p-6 bg-card/40 border-border/60">
-          <div className="flex items-center gap-3 font-mono text-sm text-primary">
-            <Terminal className="h-4 w-4" />
-            <span>npm run worker</span>
-          </div>
+        <div className="bg-muted rounded-lg p-4 font-mono text-sm overflow-x-auto">
+          <pre className="text-yellow-400">
+            {`# Create workflow
+curl -X POST http://localhost:5000/api/workflows \\
+  -H "Authorization: Bearer <token>" \\
+  -H "Content-Type: application/json" \\
+  -d @workflow.json
 
-          <div className="mt-4 space-y-2 font-mono text-sm">
-            <div className="flex items-center gap-2 text-green-500">
-              <CheckCircle2 className="h-4 w-4" />
-              <span>Task claimed: workflow_01</span>
-            </div>
-            <div className="text-muted-foreground">
-              → Executing step: LLM prompt
-            </div>
-            <div className="text-muted-foreground">
-              → Writing output to runtime/
-            </div>
-          </div>
-        </Card>
-      </section>
-
-      {/* Explanation Lifecycle */}
-      <section className="space-y-6">
-        <h2 className="text-3xl font-bold">
-          What Happens When You Run a Workflow
-        </h2>
-
-        <p className="text-muted-foreground leading-relaxed max-w-3xl">
-          Every workflow execution follows a deterministic lifecycle.
-          Understanding this flow helps you debug failures, optimize steps, and
-          reason about agent behavior with confidence.
-          <br />
-          <br />
-          When you click “Run Workflow”, the platform follows a deterministic
-          execution path. Here’s what happens under the hood:
-        </p>
-
-        <div className="relative border-l-2 border-primary/20 ml-4 pl-8 space-y-10">
-          {[
-            [
-              "Workflow Initialization",
-              "Runner initializes the workflow and its steps.",
-            ],
-            ["Task Claiming", "Runner claims the task for execution."],
-            [
-              "Step Runner Initialization",
-              "Step runner sets up execution context.",
-            ],
-            [
-              "Tool Execution",
-              "Each step is dispatched to the appropriate tool implementation.",
-            ],
-            ["Logs", "Execution logs are recorded for each step."],
-            ["Status", "Task status is updated in real-time."],
-          ].map(([title, desc]) => (
-            <div key={title} className="relative">
-              <div className="absolute -left-[41px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-background" />
-              <h4 className="font-bold">{title}</h4>
-              <p className="text-muted-foreground text-sm">{desc}</p>
-            </div>
-          ))}
+# Run workflow
+curl -X POST http://localhost:5000/api/workflows/<id>/run \\
+  -H "Authorization: Bearer <token>"`}
+          </pre>
         </div>
       </section>
 
-      <h2 className="text-2xl font-bold">
-        How the System Works (Mental Model)
-      </h2>
-      <p className="text-muted-foreground leading-relaxed">
-        Think of the platform as three coordinated systems working together:
-      </p>
-      <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-        <li>
-          <strong>Workflows</strong> define what should happen
-        </li>
-        <li>
-          <strong>Tasks</strong> are runtime executions of workflows
-        </li>
-        <li>
-          <strong>Agents & Tools</strong> perform each step deterministically
-        </li>
-      </ul>
-
-      {/* Final Note */}
-      <Card className="p-6 bg-primary/5 border-primary/20">
-        <p className="text-muted-foreground">
-          🎯 That’s it. You now have a fully local AI automation system running
-          under your control. No vendor lock-in, no black boxes, no hidden
-          costs.
+      {/* Step 4 */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-3">
+          <CheckCircle2 className="h-6 w-6 text-primary" />
+          <h2 className="text-2xl font-bold">4. Inspect Results</h2>
+        </div>
+        <p className="text-muted-foreground max-w-3xl">
+          Check the Tasks page to see the execution status, step results, and
+          logs. Each step&apos;s input, output, and duration are recorded for
+          debugging.
         </p>
+      </section>
+
+      <Card className="p-6 border-secondary/20 bg-secondary/5">
+        <h3 className="font-bold text-lg mb-2">What&apos;s Next?</h3>
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li className="flex gap-2">
+            <span className="text-secondary">•</span> Explore the{" "}
+            <a href="/docs/agents/" className="text-primary underline">
+              Agents
+            </a>{" "}
+            page to configure provider-specific models.
+          </li>
+          <li className="flex gap-2">
+            <span className="text-secondary">•</span> Read about{" "}
+            <a href="/docs/memory/" className="text-primary underline">
+              Agent Memory
+            </a>{" "}
+            to enable cross-execution context.
+          </li>
+          <li className="flex gap-2">
+            <span className="text-secondary">•</span> Set up the{" "}
+            <a href="/docs/scheduler/" className="text-primary underline">
+              Scheduler
+            </a>{" "}
+            for recurring workflow runs.
+          </li>
+          <li className="flex gap-2">
+            <span className="text-secondary">•</span> Configure{" "}
+            <a href="/docs/webhooks/" className="text-primary underline">
+              Webhooks
+            </a>{" "}
+            to trigger workflows from external services.
+          </li>
+        </ul>
       </Card>
     </div>
   );

@@ -28,8 +28,10 @@ export default function RAGDocs() {
           Document Chat (RAG)
         </h1>
         <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
-          Upload PDFs, ingest them into a local vector store, and chat with your
-          documents using retrieval-augmented generation.
+          Upload PDFs, TXT, Markdown, CSV, and JSON files. Ingest them into a
+          local vector store, and chat with your documents using
+          retrieval-augmented generation with hybrid search and source
+          attribution.
         </p>
       </div>
 
@@ -39,7 +41,8 @@ export default function RAGDocs() {
           Retrieval-Augmented Generation (RAG) combines the power of semantic
           search with LLM reasoning. Documents are chunked, embedded, and stored
           in a vector database. When you ask a question, the system retrieves
-          the most relevant chunks and uses them to ground the AI's response.
+          the most relevant chunks and uses them to ground the AI&apos;s
+          response.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
@@ -95,15 +98,20 @@ export default function RAGDocs() {
             </span>
           </div>
           <pre className="p-6 text-sm font-mono overflow-x-auto text-muted-foreground">
-            <code>{`curl -X POST http://localhost:5000/api/v1/documents/upload \\
-  -F "file=@research_paper.pdf" \\
-  -F "metadata={\\"title\\":\\"AI Research\\",\\"tags\\":[\\"ai\\",\\"ml\\"]}"
+            <code>{`curl -X POST http://localhost:5000/api/documents/upload \\
+  -H "Authorization: Bearer <token>" \\
+  -F "file=@research_paper.pdf"
 
 # Response:
 {
-  "document_id": "doc_abc123",
-  "chunks_created": 45,
-  "status": "indexed"
+  "ok": true,
+  "document": {
+    "_id": "doc_abc123",
+    "title": "research_paper.pdf",
+    "fileType": "pdf",
+    "chunkCount": 45,
+    "status": "processing"
+  }
 }`}</code>
           </pre>
         </Card>
@@ -125,20 +133,40 @@ export default function RAGDocs() {
           <pre className="p-6 text-sm font-mono overflow-x-auto text-muted-foreground">
             <code>{`{
   "query": "What are the key findings about neural networks?",
-  "document_ids": ["doc_abc123"],
-  "top_k": 5
+  "documentIds": ["doc_abc123"],
+  "topK": 5
 }
 
 # Response:
 {
+  "ok": true,
   "answer": "The key findings indicate that...",
   "sources": [
-    { "chunk_id": "chunk_12", "page": 3, "relevance": 0.92 },
-    { "chunk_id": "chunk_45", "page": 8, "relevance": 0.88 }
+    { "chunkId": "chunk_12", "page": 3, "relevance": 0.92 },
+    { "chunkId": "chunk_45", "page": 8, "relevance": 0.88 }
   ]
 }`}</code>
           </pre>
         </Card>
+      </div>
+
+      <div className="space-y-6">
+        <h2 className="text-3xl font-bold">Document Chat API</h2>
+        <div className="grid gap-4">
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-success/20 text-success border-none font-mono">
+                POST
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/documents/chat
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Send a chat message against selected documents with RAG retrieval.
+            </p>
+          </Card>
+        </div>
       </div>
 
       <Card className="p-6 border-secondary/20 bg-secondary/5">

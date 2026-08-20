@@ -9,7 +9,6 @@ export const metadata = {
   alternates: {
     canonical: "/docs/local-first/",
   },
-
   openGraph: {
     url: "/docs/local-first/",
   },
@@ -34,14 +33,17 @@ export default function LocalFirstDocs() {
         </p>
       </div>
 
-      <div className="prose prose-invert max-w-none">
-        <p className="text-lg text-muted-foreground leading-relaxed">
-          The "Local-First" approach is more than just a deployment option—it's
-          a fundamental design principle that affects everything from
-          architecture to performance. By bringing the automation engine to your
-          data, rather than sending your data to the engine, we eliminate
-          latency, reduce security risks, and give you absolute control.
-        </p>
+      <div className="space-y-6">
+        <div className="prose prose-invert max-w-none">
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            The &quot;Local-First&quot; approach is more than just a deployment
+            option—it&apos;s a fundamental design principle that affects
+            everything from architecture to performance. By bringing the
+            automation engine to your data, rather than sending your data to the
+            engine, we eliminate latency, reduce security risks, and give you
+            absolute control.
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -62,7 +64,7 @@ export default function LocalFirstDocs() {
               {
                 icon: Globe,
                 title: "No Subscription Limits",
-                desc: "You aren't charged per task or per workflow. Your hardware is the only limit.",
+                desc: "You aren&apos;t charged per task or per workflow. Your hardware is the only limit.",
               },
             ].map((item, i) => (
               <div key={i} className="flex gap-4">
@@ -84,7 +86,7 @@ export default function LocalFirstDocs() {
             <div className="inline-flex h-16 w-16 rounded-full bg-secondary/10 items-center justify-center mb-2">
               <HardDrive className="h-8 w-8 text-secondary" />
             </div>
-            <h3 className="text-xl font-bold">The "Laptop-Cloud" Spectrum</h3>
+            <h3 className="text-xl font-bold">The &quot;Laptop-Cloud&quot; Spectrum</h3>
             <p className="text-sm text-muted-foreground">
               Our architecture is portable across your entire development
               lifecycle.
@@ -151,15 +153,6 @@ export default function LocalFirstDocs() {
           ))}
         </div>
       </div>
-
-      <Card className="p-8 border-primary/20 bg-primary/5 text-center space-y-4">
-        <h3 className="text-2xl font-bold">Embrace Data Sovereignty</h3>
-        <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Local-first design isn't just about technical constraints—it's about
-          freedom. Freedom from subscription fatigue, freedom from vendor
-          lock-in, and freedom to control your own intelligent infrastructure.
-        </p>
-      </Card>
     </div>
   );
 }

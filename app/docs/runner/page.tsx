@@ -9,16 +9,16 @@ import {
   PlayCircle,
   Database,
   ArrowRight,
+  Lock,
 } from "lucide-react";
 
 export const metadata = {
   title: "Workflow Runner | AI Agent Automation Docs",
   description:
-    "Understand how the workflow runner executes automation pipelines step-by-step.",
+    "Understand how the workflow runner executes automation pipelines step-by-step, including parallel execution, retries, and distributed locking.",
   alternates: {
     canonical: "/docs/runner/",
   },
-
   openGraph: {
     url: "/docs/runner/",
   },
@@ -40,8 +40,9 @@ export default function StepRunnerPage() {
         </h1>
         <p className="text-xl text-muted-foreground leading-relaxed">
           The Step Runner is the heart of the platform — responsible for
-          claiming tasks, executing workflow steps sequentially, managing
-          context, and persisting results.
+          claiming tasks, executing workflow steps sequentially or in parallel,
+          managing context, persisting results, and handling retries with
+          distributed locking.
         </p>
       </div>
 
@@ -70,7 +71,7 @@ export default function StepRunnerPage() {
             <Layers className="h-6 w-6 text-primary" />
             <h4 className="font-bold">Step Runner</h4>
             <p className="text-sm text-muted-foreground">
-              Claims tasks and executes steps in strict order.
+              Claims tasks and executes steps in strict order or in parallel.
             </p>
           </Card>
 
@@ -104,13 +105,13 @@ export default function StepRunnerPage() {
             ],
             [
               "Step Execution",
-              "Each step runs sequentially using the shared context.",
+              "Each step runs sequentially or in parallel using the shared context.",
             ],
             [
               "Persistence",
               "Step results and logs are written to the database.",
             ],
-            ["Completion", "Task is marked COMPLETED or FAILED."],
+            ["Completion", "Task is marked COMPLETED, FAILED, or PENDING_APPROVAL."],
           ].map(([title, desc]) => (
             <div key={title} className="relative">
               <div className="absolute -left-[41px] top-1 h-4 w-4 rounded-full bg-primary border-4 border-background" />
@@ -133,6 +134,13 @@ export default function StepRunnerPage() {
             ["Email", "Send templated emails using workflow data."],
             ["Delay", "Pause execution for a specified duration."],
             ["Browser", "Take screenshots, evaluate scripts, extract content."],
+            ["Document Query", "Query documents using RAG retrieval."],
+            ["Condition", "Branch execution based on boolean expressions."],
+            ["Switch", "Route to multiple cases based on a value."],
+            ["Parallel / Join", "Execute branches concurrently and synchronize."],
+            ["Approval", "Pause for human approval before proceeding."],
+            ["Agent Call", "Delegate execution to a specialized agent."],
+            ["MCP", "Call tools exposed by MCP servers."],
           ].map(([name, desc]) => (
             <Card key={name} className="p-6 bg-card/30 space-y-2">
               <h4 className="font-bold">{name} Step</h4>
@@ -154,11 +162,11 @@ export default function StepRunnerPage() {
 
           <ul className="list-disc list-inside text-sm text-muted-foreground space-y-2">
             <li>
-              <code>{"{{last}}"}</code>
-              references the previous step output
+              <code>{"{{last}}"}</code> references the previous step output
             </li>
             <li>Named variables can be injected into prompts and payloads</li>
             <li>Agent memory can persist facts across multiple tasks</li>
+            <li>Trace IDs are attached to every log for end-to-end debugging</li>
           </ul>
 
           <div className="flex items-center gap-2 text-sm text-primary">
@@ -167,12 +175,6 @@ export default function StepRunnerPage() {
           </div>
         </Card>
       </section>
-
-      <p className="text-muted-foreground leading-relaxed">
-        The Step Runner guarantees deterministic execution: each step runs only
-        after the previous one completes successfully, with full access to all
-        prior outputs.
-      </p>
 
       {/* Error Handling */}
       <section className="space-y-6">
@@ -191,10 +193,28 @@ export default function StepRunnerPage() {
             <Repeat className="h-5 w-5 text-blue-500" />
             <h4 className="font-bold">Retries</h4>
             <p className="text-sm text-muted-foreground">
-              Steps can retry with backoff before marking the task as failed.
+              Steps can retry with exponential backoff before marking the task as
+              failed.
             </p>
           </Card>
         </div>
+      </section>
+
+      {/* Distributed Locks */}
+      <section className="space-y-6">
+        <h2 className="text-3xl font-bold">Distributed Locks & Parallel Safety</h2>
+        <Card className="p-6 bg-card/30 space-y-4">
+          <p className="text-muted-foreground">
+            Parallel and join nodes use MongoDB-backed distributed locks and
+            semaphores. This ensures that even when multiple workers are
+            running, branches do not race or corrupt shared state.
+          </p>
+          <ul className="list-disc list-inside text-sm text-muted-foreground space-y-2">
+            <li>Lock manager enforces concurrency limits per worker.</li>
+            <li>Join nodes wait for all branches to release their locks.</li>
+            <li>Fail-fast strategy aborts remaining branches on first failure.</li>
+          </ul>
+        </Card>
       </section>
     </div>
   );

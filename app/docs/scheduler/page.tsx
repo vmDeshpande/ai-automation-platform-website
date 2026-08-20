@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Calendar, Clock, Repeat, Zap, Code } from "lucide-react";
+import { Calendar, Clock, Repeat, Zap, Code, ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Scheduler | AI Agent Automation Docs",
@@ -36,10 +36,9 @@ export default function SchedulerDocs() {
       <div className="space-y-6">
         <h2 className="text-3xl font-bold">How the Scheduler Works</h2>
         <p className="text-muted-foreground leading-relaxed">
-          The Scheduler is a standalone service that evaluates cron expressions
-          and triggers workflows at specified intervals. It runs independently
-          of the main API server, ensuring reliable execution even during high
-          load.
+          The Scheduler is a service that evaluates cron expressions and creates
+          workflow tasks at specified intervals. It runs as part of the backend
+          process and uses the same task queue as manual executions.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
@@ -86,78 +85,110 @@ export default function SchedulerDocs() {
           <div className="flex items-center gap-2 px-4 py-2 border-b border-border/50 bg-muted/30">
             <Code className="h-4 w-4 text-muted-foreground" />
             <span className="text-xs font-mono text-muted-foreground">
-              scheduled-workflow.json
+              schedule-request.json
             </span>
           </div>
           <pre className="p-6 text-sm font-mono overflow-x-auto text-muted-foreground">
             <code>{`{
   "name": "Daily Report Generator",
-  "schedule": {
-    "cron": "0 9 * * *",
-    "timezone": "America/New_York",
-    "enabled": true
-  },
-  "steps": [
-    {
-      "type": "agent",
-      "prompt": "Generate a summary report of yesterday's activity."
-    },
-    {
-      "type": "email",
-      "to": "team@example.com",
-      "subject": "Daily Report",
-      "body": "{{steps[0].output}}"
-    }
-  ]
+  "workflowId": "wf_123",
+  "cron": "0 9 * * *",
+  "timezone": "America/New_York",
+  "enabled": true,
+  "taskInput": {}
 }`}</code>
           </pre>
         </Card>
       </div>
 
       <div className="space-y-6">
-        <h2 className="text-3xl font-bold">Common Cron Patterns</h2>
+        <h2 className="text-3xl font-bold">Schedule API</h2>
         <div className="grid gap-4">
-          {[
-            { pattern: "*/5 * * * *", desc: "Every 5 minutes" },
-            { pattern: "0 * * * *", desc: "Every hour at minute 0" },
-            { pattern: "0 9 * * *", desc: "Every day at 9:00 AM" },
-            { pattern: "0 9 * * 1", desc: "Every Monday at 9:00 AM" },
-            {
-              pattern: "0 0 1 * *",
-              desc: "First day of every month at midnight",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="flex justify-between items-center p-4 rounded-lg border border-border/50 bg-card/30"
-            >
-              <code className="text-sm font-mono text-primary">
-                {item.pattern}
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-success/20 text-success border-none font-mono">
+                POST
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/schedules
               </code>
-              <span className="text-sm text-muted-foreground">{item.desc}</span>
             </div>
-          ))}
+            <p className="text-sm text-muted-foreground">
+              Create a new schedule. Requires name, workflowId, and cron.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-primary/20 text-primary border-none font-mono">
+                GET
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/schedules
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              List all schedules for the authenticated user.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-primary/20 text-primary border-none font-mono">
+                GET
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/schedules/:id
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Get schedule details including next execution time.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-primary/20 text-primary border-none font-mono">
+                PUT
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/schedules/:id
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Update a schedule (cron, timezone, enabled, etc.).
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-destructive/20 text-destructive border-none font-mono">
+                DELETE
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/schedules/:id
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Delete a schedule.
+            </p>
+          </Card>
         </div>
       </div>
 
       <Card className="p-6 border-secondary/20 bg-secondary/5">
-        <h3 className="font-bold text-lg mb-3">Scheduler Management</h3>
+        <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
+          <ArrowRight className="h-5 w-5 text-secondary" />
+          Notes
+        </h3>
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li className="flex gap-2">
-            <span className="text-secondary">•</span> View all active schedules
-            via the API or dashboard
+            <span className="text-secondary">•</span> The scheduler validates
+            that the linked workflow has steps before creating a schedule.
           </li>
           <li className="flex gap-2">
-            <span className="text-secondary">•</span> Pause or resume schedules
-            without deleting them
+            <span className="text-secondary">•</span> Ownership is enforced:
+            only the workflow owner can create or modify schedules.
           </li>
           <li className="flex gap-2">
-            <span className="text-secondary">•</span> Execution history is
-            logged for audit and debugging
-          </li>
-          <li className="flex gap-2">
-            <span className="text-secondary">•</span> Failed executions can
-            trigger retry or alerting workflows
+            <span className="text-secondary">•</span> Disabled schedules are
+            skipped by the scheduler loop.
           </li>
         </ul>
       </Card>

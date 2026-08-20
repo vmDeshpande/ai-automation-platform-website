@@ -1,15 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Bot, Brain, Wrench, MessageSquare, Code } from "lucide-react";
+import { Bot, Brain, Wrench, MessageSquare, Code, Users } from "lucide-react";
 
 export const metadata = {
   title: "AI Agents | AI Agent Automation Docs",
   description:
-    "Learn how AI agents work in the automation platform including configuration, providers, models, and execution behavior.",
-    alternates: {
+    "Learn how AI agents work in the automation platform including configuration, providers, models, execution behavior, teams, and playground testing.",
+  alternates: {
     canonical: "/docs/agents/",
   },
-
   openGraph: {
     url: "/docs/agents/",
   },
@@ -30,7 +29,8 @@ export default function AgentsDocs() {
         </h1>
         <p className="text-xl text-muted-foreground leading-relaxed max-w-3xl">
           Autonomous agents that can reason, use tools, and execute multi-step
-          tasks with full observability.
+          tasks with full observability. Supports multi-agent teams, agent
+          delegation, and direct playground testing.
         </p>
       </div>
 
@@ -39,9 +39,8 @@ export default function AgentsDocs() {
         <p className="text-muted-foreground leading-relaxed">
           An agent is an AI-powered execution unit that receives a goal, reasons
           about how to achieve it, selects and uses appropriate tools, and
-          produces structured outputs. Unlike simple prompt chains, agents have
-          agency—they decide which actions to take based on context and
-          feedback.
+          produces structured outputs. Agents are configured with a provider,
+          model, role, system instructions, and a set of capabilities.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -59,12 +58,17 @@ export default function AgentsDocs() {
             {
               icon: MessageSquare,
               title: "Memory & Context",
-              desc: "Maintains conversation history and retrieves relevant past interactions.",
+              desc: "Maintains conversation history and retrieves relevant past interactions using semantic memory.",
             },
             {
               icon: Code,
               title: "Structured Output",
               desc: "Returns validated JSON responses that can be consumed by downstream steps.",
+            },
+            {
+              icon: Users,
+              title: "Agent Teams",
+              desc: "Group multiple agents into teams with shared objectives, war room chat, and A2A communication.",
             },
           ].map((item, i) => (
             <div
@@ -87,10 +91,10 @@ export default function AgentsDocs() {
 
       <div className="space-y-6">
         <h2 className="text-3xl font-bold">Agent Configuration</h2>
-        <p className="text-muted-foreground leading-relaxed">
-          Agents are defined with a system prompt, model selection, tool access
-          list, and execution constraints. Each agent runs in isolation with its
-          own context window.
+        <p className="text-muted-foreground">
+          Agents are created via the Agents page or the API. Each agent requires
+          a name, provider, and model. Optional fields include role, objective,
+          system instructions, avatar, type, capabilities, and quota.
         </p>
         <Card className="overflow-hidden border-border/50 bg-card/50">
           <div className="flex items-center gap-2 px-4 py-2 border-b border-border/50 bg-muted/30">
@@ -101,14 +105,16 @@ export default function AgentsDocs() {
           </div>
           <pre className="p-6 text-sm font-mono overflow-x-auto text-muted-foreground">
             <code>{`{
-  "name": "research_assistant",
-  "system_prompt": "You are a research assistant. Your job is to gather information from the web, analyze it, and provide concise summaries.",
-  "model": "gpt-4",
-  "temperature": 0.7,
-  "max_tokens": 2000,
-  "tools": ["web_search", "text_summarizer", "file_writer"],
-  "memory_enabled": true,
-  "max_iterations": 5
+  "name": "Research Assistant",
+  "description": "Summarizes and analyzes information",
+  "type": "custom",
+  "provider": "openai",
+  "model": "gpt-4o-mini",
+  "role": "researcher",
+  "objective": "Find and summarize latest AI papers",
+  "systemInstructions": "You are a research assistant...",
+  "capabilities": ["llm", "web_search"],
+  "isActive": true
 }`}</code>
           </pre>
         </Card>
@@ -151,27 +157,83 @@ export default function AgentsDocs() {
         </div>
       </div>
 
-      <Card className="p-6 border-secondary/20 bg-secondary/5">
-        <h3 className="font-bold text-lg mb-3">Agent Safety & Guardrails</h3>
-        <ul className="space-y-2 text-sm text-muted-foreground">
-          <li className="flex gap-2">
-            <span className="text-secondary">•</span> Maximum iteration limits
-            prevent infinite loops
-          </li>
-          <li className="flex gap-2">
-            <span className="text-secondary">•</span> Tool permissions are
-            enforced at the executor level
-          </li>
-          <li className="flex gap-2">
-            <span className="text-secondary">•</span> Output validation ensures
-            structured responses
-          </li>
-          <li className="flex gap-2">
-            <span className="text-secondary">•</span> All actions are logged for
-            audit and debugging
-          </li>
-        </ul>
-      </Card>
+      <div className="space-y-6">
+        <h2 className="text-3xl font-bold">Agent Safety & Guardrails</h2>
+        <Card className="p-6 border-secondary/20 bg-secondary/5">
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex gap-2">
+              <span className="text-secondary">•</span> Maximum iteration
+              limits prevent infinite loops.
+            </li>
+            <li className="flex gap-2">
+              <span className="text-secondary">•</span> Tool permissions are
+              enforced at the executor level.
+            </li>
+            <li className="flex gap-2">
+              <span className="text-secondary">•</span> Output validation
+              ensures structured responses.
+            </li>
+            <li className="flex gap-2">
+              <span className="text-secondary">•</span> All actions are logged
+              for audit and debugging.
+            </li>
+          </ul>
+        </Card>
+      </div>
+
+      <div className="space-y-6">
+        <h2 className="text-3xl font-bold">Agent Playground</h2>
+        <p className="text-muted-foreground leading-relaxed">
+          Test agents directly from the UI without creating a workflow. The
+          playground sends prompts through the same LLM adapter used by workflow
+          steps, so results are representative of production execution.
+        </p>
+      </div>
+
+      <div className="space-y-6">
+        <h2 className="text-3xl font-bold">Agent API</h2>
+        <div className="grid gap-4">
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-success/20 text-success border-none font-mono">
+                POST
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/agents
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Create a new agent profile.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-primary/20 text-primary border-none font-mono">
+                GET
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/agents
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              List all registered agent profiles for the user.
+            </p>
+          </Card>
+          <Card className="p-4 border-border/50 bg-card/30">
+            <div className="flex items-center gap-3 mb-2">
+              <Badge className="bg-success/20 text-success border-none font-mono">
+                POST
+              </Badge>
+              <code className="text-sm font-mono font-bold">
+                /api/agents/:id/run
+              </code>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Send a prompt directly to an agent. Used by the playground.
+            </p>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }
