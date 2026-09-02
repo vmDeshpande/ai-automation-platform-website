@@ -128,14 +128,14 @@ export function DocsSidebar({
   const pathname = usePathname();
 
   return (
-    <div className="space-y-8">
+    <div className="w-full space-y-8">
       {sidebarItems.map((section, i) => (
         <div key={i} className="space-y-3">
-          <h4 className="px-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/60">
+          <h4 className="px-2 text-xs font-bold uppercase tracking-[0.12em] text-muted-foreground/70">
             {section.title}
           </h4>
 
-          <div className="grid gap-0.5 text-sm">
+          <div className="grid gap-1 text-sm">
             {section.items.map((item, j) => {
               const active = pathname === item.href;
 
@@ -145,21 +145,21 @@ export function DocsSidebar({
                   href={item.href}
                   onClick={onNavigate}
                   className={cn(
-                    "group flex items-center rounded-md px-2 py-1.5 transition-colors",
+                    "group flex w-full items-center rounded-md px-2.5 py-2 text-left transition-colors duration-200",
                     active
-                      ? "bg-accent text-primary font-semibold"
+                      ? "bg-accent text-primary font-semibold shadow-sm"
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   )}
                 >
                   <item.icon
                     className={cn(
-                      "mr-2.5 h-4 w-4",
+                      "mr-2.5 h-4 w-4 shrink-0",
                       active
                         ? "text-primary"
-                        : "text-muted-foreground/50 group-hover:text-foreground"
+                        : "text-muted-foreground/60 group-hover:text-foreground"
                     )}
                   />
-                  {item.title}
+                  <span className="truncate">{item.title}</span>
                 </Link>
               );
             })}

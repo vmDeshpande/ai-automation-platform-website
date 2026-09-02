@@ -20,44 +20,44 @@ export default function DocsLayout({
       <Navigation onDocsToggle={() => setMobileOpen(true)} />
 
       {/* ================= MOBILE SIDEBAR ================= */}
-{mobileOpen && (
-  <div className="fixed inset-0 z-[100] md:hidden">
-    {/* Backdrop */}
-    <div
-      className="absolute inset-0 bg-black/60"
-      onClick={() => setMobileOpen(false)}
-    />
+      {mobileOpen && (
+        <div className="fixed inset-0 z-[100] md:hidden">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setMobileOpen(false)}
+          />
 
-    {/* Sidebar */}
-    <aside className="absolute left-0 top-0 h-full w-72 bg-background border-r border-border flex flex-col">
-      <div className="h-16 flex items-center justify-between px-4 border-b border-border">
-        <span className="font-semibold">Documentation</span>
-        <button onClick={() => setMobileOpen(false)}>
-          ✕
-        </button>
-      </div>
+          <aside className="absolute left-0 top-0 flex h-full w-[85vw] max-w-sm flex-col border-r border-border bg-background shadow-2xl">
+            <div className="flex h-16 items-center justify-between border-b border-border px-4">
+              <span className="font-semibold">Documentation</span>
+              <button
+                type="button"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                aria-label="Close documentation menu"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
-        <DocsSidebar onNavigate={() => setMobileOpen(false)} />
-      </div>
-    </aside>
-  </div>
-)}
-
+            <div className="no-scrollbar flex-1 overflow-y-auto p-4">
+              <DocsSidebar onNavigate={() => setMobileOpen(false)} />
+            </div>
+          </aside>
+        </div>
+      )}
 
       {/* ================= PAGE CONTENT ================= */}
-      <div className="container mx-auto flex-1 py-10 px-4">
-        <div className="flex flex-col md:flex-row gap-12 justify-center">
-          {/* Desktop Sidebar (UNCHANGED) */}
-          <aside className="hidden md:block w-72 shrink-0">
-            <div className="h-[calc(100vh-4.5rem)]">
+      <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-10 sm:px-6 lg:px-8">
+        <div className="grid gap-8 md:grid-cols-[260px_minmax(0,1fr)] lg:gap-12">
+          <aside className="hidden md:block md:pr-2">
+            <div className="no-scrollbar sticky top-24 h-[calc(100vh-6rem)] overflow-y-auto pb-6">
               <DocsSidebar />
             </div>
           </aside>
 
-          {/* Main Content */}
-          <main className="flex-1 min-w-0">
-            <div className="max-w-4xl mx-auto pb-20">
+          <main className="min-w-0 w-full">
+            <div className="mx-auto w-full max-w-4xl pb-20">
               {children}
             </div>
           </main>
